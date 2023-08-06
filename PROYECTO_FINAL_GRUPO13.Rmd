@@ -309,9 +309,10 @@ ggplot(empresas_activa, aes(x=fecha_const,  y = Apalancamiento, color= TipoEmpre
 #### ¿El endeudamiento del activo fue mayor en empresas micro + pequeñas vs. grandes?
 
 ```{r}
-
-pregunta1<-empresas_4 %>% dplyr::group_by(empresas_4$tamanio) %>% summarise(Promedio_Endeudamiento=mean(EndeudamientoActivo, na.rm = TRUE))
-# pregunta1
+pregunta1 <- empresas_4 %>%
+  group_by(tamanio) %>%
+  summarise(Promedio_Endeudamiento = mean(EndeudamientoActivo, na.rm = FALSE))
+pregunta1
 ggplot(pregunta1, aes(x = tamanio, y = Promedio_Endeudamiento, fill = tamanio)) +
   geom_bar(stat = "identity") +
   scale_fill_brewer(palette = "Set1") +
@@ -319,27 +320,27 @@ ggplot(pregunta1, aes(x = tamanio, y = Promedio_Endeudamiento, fill = tamanio)) 
        x = "Tamaño de Empresa",
        y = "Promedio del Endeudamiento Activo") +
   theme_minimal()
+grafico_endeudamiento
 ```
 
 #### ¿La liquidez por tipo de compañía es diferente entre aquellas empresas que tienen más de 60 trabajadores directos y que cuenta con 100 a 800 trabajadores administrativos?
 
 ```{r}
-#empresas_filtradas <- empresas_4 %>%
- # dplyr:::filter(empresas_4$trabajadores_administrativos >= 100, empresas_4$trabajadores_administrativos <= 800,empresas_4$trabajadores_directo > 60)
-
-#empresas_filtradas
-
-#pregunta2 <- empresas_filtradas %>%
-#  dplyr::group_by(empresas_filtradas$TipoEmpresa) %>%
-#  summarise(Promedio_Liquidez = mean(LiquidezCorriente, na.rm = FALSE))#liquidez por tipo de empresa
-#pregunta2
- ggplot(pregunta2, aes(x = TipoEmpresa, y = Promedio_Liquidez, fill = TipoEmpresa)) +
+empresas_filtradas <- empresas_4 %>%
+  filter(trabajadores_administrativos >= 100, trabajadores_administrativos <= 800,trabajadores_directo > 60) 
+empresas_filtradas
+pregunta2 <- empresas_filtradas %>%
+  group_by(TipoEmpresa) %>%
+  summarise(Promedio_Liquidez = mean(LiquidezCorriente, na.rm = FALSE))
+pregunta2
+ggplot(pregunta2, aes(x = TipoEmpresa, y = Promedio_Liquidez, fill = TipoEmpresa)) +
   geom_bar(stat = "identity") +
   scale_fill_brewer(palette = "Set1") +
   labs(title = "Promedio de Liquidez por Tipo de Empresa",
        x = "Tipo de Empresa",
        y = "Promedio de Liquidez") +
   theme_minimal()
+grafico_trabajadores
 ```
 
 
@@ -362,9 +363,6 @@ grafico_apalancamiento <- ggplot(top_empresas_apalancamiento, aes(x = Empresas, 
  scale_fill_discrete(name = "Empresas")
 grafico_apalancamiento
 ```
-
-
-
 
 
 
