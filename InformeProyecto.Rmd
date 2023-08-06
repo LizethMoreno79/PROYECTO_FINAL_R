@@ -1,0 +1,401 @@
+---
+title: "PROYECTO FINAL MÓDULO DE R"
+author: "Lizeth Moreno, Carolina Briones, Tamara Quijano"
+date: "`r Sys.Date()`"
+output: 
+  rmdformats::readthedown
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introducción
+
+Las ratios financieros son los indicadores de la situación de la empresa. Son una relación entre unidades financieras, con la que es posible realizar un análisis de la situación o balance económico de la empresa. Se adopta acuerdos a las necesidades concretas para analizar la situación económica para posteriormente mejorar la gestión en la toma de decisiones. 
+
+Los cuatro tipos de ratios financieras se clasifican en:
+
+- **Liquidez** que se realiza mediante la suma de dinero disponible en caja, más el dinero pendiente de recibir por los clientes,dividir el pasivo a corto y largo plazo. 
+- **Gestión** detecta la efectividad y eficiencia en la gestión de las empresas relativas a las ventas al contado, ventas totales, los cobros y gestión de inventarios. 
+- **Solvencia** se relacionan con un mayor espacio de tiempo entre dos variables: el activo total que se divide con el pasivo total. 
+- **Rentabilidad** trata de la conexión entre los recursos invertidos y los beneficios generados.
+
+Estos indicadores de valor comprenden diferentes métricas del negocio, en este proyecto destacarán los ratios de liquidez y solvencia.
+
+## Objetivos
+
+- Analizar las ratios comparándolos en función de la situación económicas - financieras de la empresa, dar soluciones concretas acerca de la situación de la empresa.
+- Realizar la descripción de los cuatro tipos de indicadores financieros como liquidez, gestión, solvencia y de rentabilidad para comparar a las empresas por su tamaño en función de las ratios financieros.
+- Demostrar un dominio competente de las librerías utilizadas en ciencia de datos, mostrando su aplicación efectiva en el análisis y visualización de datos.
+- Mostrar un sólido conocimiento y habilidades en el lenguaje de programación R, evidenciado a través de la implementación de código efectivo y eficiente para manipular datos, realizar análisis estadísticos y crear visualizaciones gráficas.
+
+## Descripción de los datos
+
+### Lectura de Librerías
+
+Para el análisis de este proyecto se han cargado las siguientes librerías:
+
+- **readxl**: Paquete que facilita la transferencia de datos de Excel a R.
+- tidyr: Es un paquete que nos ayuda a simplificar el proceso de creación de datos ordenados.
+- **ggplot2**: Sistema organizado de visualización de datos.
+- **tidyverse**: Es una colección de paquetes disponibles en R y orientados a la manipulación, importación, exploración y visualización de datos. Está compuesto de los siguientes paquetes: readr, dplyr, ggplot2, tibble, tidyr, purr, stringr, focats.
+- **dplyr**: Paquete que proporciona una grámatica de manipulación de datos y proporciona los verbos más utilizados que ayudan a los análisis de ciencia de datos a resolver la manipulación de datos más común.
+
+```{r warning=FALSE, include=FALSE}
+library(readxl)
+library(tidyr)
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+```
+
+### Tratamiento de la base
+
+Las  bases de datos proporcionadas son 4 en formato xlsx .
+
+- **Balances_2014**: Contiene información correspondiente a balances de varias empresas, se describre su situación, país, provincia, activos fijos, pasivos, entre otros.
+- **cias_codebook**: Diccionario
+- **ciiu**: Listado de actividades económicas con su respectivo nivel
+- **Formulario 102**: Documento de la declaración del impuesto a la renta personas naturales y sucesiones invisas obligadas a llevar contabilidad (SRI)
+
+Una vez cargadas las librerias, se prosigue con la lectura de los datos. 
+
+```{r echo=TRUE}
+balances_2014 <- read_excel("Data/balances_2014.xlsx")
+balances_2014
+#cias_codebook <- read_excel("Data/cias_codebook.xlsx")
+#ciiu <- read_excel("Data/ciiu.xlsx")
+#Formulario_102 <- read_excel("Data/Formulario 102.xls")
+```
+
+Utilizando los datos en el archivo llamado balance 2014 se generó un tibble, posterior se reduce la dimensión de la base con variables pedidas en el proyecto.
+
+```{r}
+empresas<-tibble::as_tibble(balances_2014) 
+empresas_1<- empresas %>%  mutate(LiquidezCorriente= (v345/v539), 
+                                   EndeudamientoActivo= (v599/v499),
+                                   EndeudamientoPatrimonial= (v599/v698),
+                                   EndeudamientoActivoFijo= (v698/v498),
+                                   Apalancamiento= (v499/v698))  %>%
+                            select(Empresas=nombre_cia, 
+                                   Status=situacion,
+                                   TipoEmpresa = tipo, 
+                                   Pais=pais, 
+                                   Provincia=provincia, 
+                                   Canton=canton, 
+                                   Ciudad=ciudad,
+                                   Actividad_economica=ciiu4_nivel1,
+                                   SubActividad=ciiu4_nivel6,
+                                   LiquidezCorriente,
+                                   EndeudamientoActivo,
+                                   EndeudamientoPatrimonial,
+                                   EndeudamientoActivoFijo,
+                                   Apalancamiento,
+                                   fecha_const)
+empresas_1
+```
+
+Esta nueva base de datos estará conformada por las siguientes variables:
+
+- Empresas: variable que contiene los nombres de las compañías
+- Status: variable que especifica la situación de la compañía ( activa, en liquidación,
+etc)
+- Tipo_de_empresa: variable que contiene la clase de compañía analizada (anónima,
+economía mixta, etc)
+- País
+- Provincia
+- Cantón
+- Ciudad
+- Actividad económica: variable que contiene la descripción del código CIIU4 NIVEL
+- Subactividad: variable que contiene la descripción del código CIIU4 NIVEL 6
+- Liquidez corriente: Indicador financiero que se compone de la siguiente forma:
+
+$$Liquidez_Corriente=\frac{Activo_Corriente}{Pasivo_Corriente}$$
+
+- Endeudamiento del activo:
+
+$$Endeudamiento_Activo=\frac{Pasivo}{Activo}$$
+
+- Endeudamiento patrimonial:
+$$Endeudamiento_Patrimonial=\frac{Pasivo}{Patrimonio}$$
+- Endeudamiento del Activo Fijo:
+
+$$Endeudamiento_Activo_Fijo=\frac{Patrimonio}{Activo_No_Corriente}$$
+
+- Apalancamiento:
+
+$$Apalancamiento=\frac{Activo}{Patrimonio}$$
+
+### Análisis exploratorio de datos
+
+Una vez se analizó la composición de variables, procedemos a explorar los datos 
+
+```{r}
+glimpse(empresas_1)
+```
+
+
+Al analizar la estructura de los datos, se observa que 9 variables son de tipo caracter, mientras que 5 son numéricas (dbl). Para asegurar una manipulación adecuada, llevamos a cabo una conversión de datos, transformando las variables de tipo texto en factores (variables con categorías) mediante el uso del comando as.factor().
+
+```{r}
+empresas_1$Status<- as.factor(empresas_1$Status) 
+empresas_1$TipoEmpresa<- as.factor(empresas_1$TipoEmpresa)
+empresas_1$Actividad_economica<- as.factor(empresas_1$Actividad_economica)
+empresas_1$SubActividad<- as.factor(empresas_1$SubActividad)#convertir a factor
+glimpse(empresas_1)
+```
+
+Con el propósito de obtener una comprensión más profunda de los datos, procedimos a calcular los estadísticos de las variables numéricas. Para tal fin, empleamos el comando summary(), el cual nos proporciona estadísticas descriptivas como los valores mínimo y máximo, los cuartiles y el promedio.
+
+```{r}
+summary(empresas_1)
+```
+
+### Datos Faltantes
+
+En la sección anterior, hemos observado que las variables Liquidez Corriente, EndeudamientoActivo, EndeudamientoPatrimonial, EndeudamientoActivoFijo y Apalancamiento contienen valores perdidos, también conocidos como NAs, así como datos con información +-INF. Estos valores pueden generar errores, especialmente en funciones estadísticas que agrupan datos para obtener resultados.
+
+En este proyecto, hemos decidido omitir este tipo de datos debido a que el porcentaje de valores faltantes no supera el 80%. Su análisis no afecta significativamente el resultado, lo que justifica su exclusión del análisis para mantener la integridad y precisión de los resultados obtenidos.
+
+
+| LiquidezCorriente | EndeudamientoActivo | EndeudamientoPatrimonial |
+|----------|----------|----------|
+| Datos NAs  | Datos NAs   | Datos NAs   |
+| 3,47 % %    | 2,04 %  | 2,02 %   |
+
+
+| EndeudamientoActivoFijo | Apalancamiento | 
+|----------|----------|
+| Datos NAs   | Datos NAs  | 
+| 2,07 %    | 2,02 %  | 
+
+
+El código siguiente realiza una transformación de los datos, convirtiendo los valores -Inf y +Inf en NAs. Posteriormente, se utiliza la función drop_na() para eliminar completamente los datos con valores faltantes de nuestra base de datos.
+
+```{r}
+#quitar datos -Inf y +Inf
+quitar_inf <- function(dataframe, columnas_numericas) {
+  # Iterar sobre las columnas numéricas y reemplazar los -Inf y +Inf con NA
+  for (col in columnas_numericas) {
+    dataframe[[col]][dataframe[[col]] == -Inf | dataframe[[col]] == Inf] <- NA
+  }
+  
+  return(dataframe)
+}
+columnas_a_limpiar <- c("LiquidezCorriente", "EndeudamientoActivo","EndeudamientoPatrimonial",
+                        "EndeudamientoActivoFijo", "Apalancamiento")
+empresas_2 <- quitar_inf(empresas_1, columnas_a_limpiar)
+
+#borrar NAs
+empresas_3 <- empresas_2 %>% drop_na()
+summary(empresas_3)
+```
+### Datos atípicos
+
+La visualización de datos atípicos es una etapa esencial en el análisis exploratorio de datos, ya que nos permite identificar observaciones que pueden ser inusuales o inesperadas en relación con el resto de los datos. Un método comúnmente utilizado para visualizar datos atípicos es el diagrama de caja y bigotes, también conocido como boxplot.
+
+El diagrama de caja y bigotes representa la distribución de un conjunto de datos en un formato gráfico simple y eficaz. Consiste en una caja que muestra el rango intercuartílico (IQR), que abarca desde el primer cuartil (Q1) hasta el tercer cuartil (Q3) de los datos. La línea central de la caja representa la mediana, que es el valor que divide al conjunto de datos en dos partes iguales: el 50% superior y el 50% inferior.
+
+Los "bigotes" del diagrama de caja se extienden desde los bordes de la caja hasta ciertos límites establecidos, que pueden ser calculados usando diferentes métodos. Los valores que se encuentran fuera de estos límites se consideran valores atípicos y son representados individualmente en el gráfico.
+
+Para crear un diagrama de caja y bigotes en R, utilizamos la función ggplot() del paquete ggplot2 y proporcionamos un vector numérico como argumento. Esta herramienta nos brinda una visualización clara y concisa de la distribución de los datos y nos ayuda a identificar de manera efectiva valores atípicos que podrían requerir un análisis adicional o una atención especial en nuestro proyecto de análisis de datos.
+
+```{r}
+empresas_3 %>% 
+  ggplot(aes(y = LiquidezCorriente)) +
+  geom_boxplot()
+empresas_3 %>% 
+  ggplot(aes(y = EndeudamientoActivo)) +
+  geom_boxplot()
+empresas_3 %>% 
+  ggplot(aes(y = EndeudamientoPatrimonial)) +
+  geom_boxplot()
+empresas_3 %>% 
+  ggplot(aes(y = EndeudamientoActivoFijo)) +
+  geom_boxplot()
+empresas_3 %>% 
+  ggplot(aes(y = Apalancamiento)) +
+  geom_boxplot()
+```
+
+
+La función siguiente cuenta con dos parámetros de entrada: el dataframe y las variables para las cuales deseamos imputar los valores atípicos. Mediante un bucle for, la función itera sobre cada variable y procede a reemplazar los valores atípicos de las variables numéricas especificadas. Para ello, utiliza el promedio para aquellos valores inferiores al percentil 5 y la mediana para aquellos valores superiores al percentil 95. Al finalizar, la función devuelve un dataframe actualizado, eliminando así los datos atípicos presentes en las variables señaladas.
+
+```{r}
+impute_outliers <- function(dataframe, variables) {
+  for (var in variables) {
+    dataframe[[var]][dataframe[[var]] < quantile(dataframe[[var]], 0.05, na.rm = TRUE)] <- mean(dataframe[[var]], na.rm = TRUE)
+    dataframe[[var]][dataframe[[var]] > quantile(dataframe[[var]], 0.95, na.rm = TRUE)] <- median(dataframe[[var]], na.rm = TRUE)
+  }
+  return(dataframe)
+}
+columnas_a_imputar <- c("LiquidezCorriente", "EndeudamientoActivo","EndeudamientoPatrimonial",
+                        "EndeudamientoActivoFijo", "Apalancamiento")
+
+empresas_4 <- impute_outliers(empresas_3, columnas_a_imputar)
+plot(empresas_4$EndeudamientoActivo)
+```
+
+La gráfica anterior corrobora que existe una dispersión adecuada de datos.
+
+## Análisis
+
+#### Crea una tabla resumiendo el número total de empresas por actividad económica y por actividad económica por cada cantón. La tabla simplemente debe aparecer como un data frame o tibble en tu script.
+
+```{r}
+#total empresas por actividad económica y por cantón
+# Resumen del número total de empresas por actividad económica
+resumen_actividad_economica <- empresas_4 %>%
+  group_by(Actividad_economica) %>%
+  summarise(Total_Empresas = n())
+resumen_actividad_economica
+# Resumen del número total de empresas por actividad económica y por cantón
+resumen_actividad_canton <- empresas_4 %>%
+  group_by(Actividad_economica, Canton) %>%
+  summarise(Total_Empresas = n()) 
+resumen_actividad_canton
+```
+
+####Gráficamente muestra el comparativo de los indicadores financieros de liquidez y solvencia por Status y provincia.
+
+```{r}
+#Graficar liquidez por status y provincia
+#solo Status=ACTIVA
+#liquidez
+empresas_activa<- empresas_4 %>% filter(Status=="ACTIVA")
+ggplot(empresas_activa, aes(x=fecha_const,  y = LiquidezCorriente, color= Provincia)) +
+  geom_line() +
+  labs(title = "Gráfico comparativo",
+       subtitle = "Gráfico comparativo entre Liquidez Corriente y provincia")+
+  facet_wrap(~Provincia)+
+  theme_grey()+
+  theme(legend.position = "none")
+#solvencia
+ggplot(empresas_activa, aes(x=fecha_const,  y = Apalancamiento, color= Provincia)) +
+  geom_line() +
+  labs(title = "Gráfico comparativo",
+       subtitle = "Gráfico comparativo entre Solvencia y provincia")+
+  facet_wrap(~Provincia)+
+  theme_grey()+
+  theme(legend.position = "none")
+```
+
+#### Gráficamente muestra el comparativo de los indicadores financieros de liquidez y solvencia por tipo de empresa.
+```{r}
+#Graficar liquidez por status y tipo de empresa
+#liquidez
+ggplot(empresas_activa, aes(x=fecha_const,  y = LiquidezCorriente, color= TipoEmpresa, group=TipoEmpresa)) +
+  geom_line() +
+  labs(title = "Gráfico comparativo",
+       subtitle = "Gráfico comparativo entre Liquidez Corriente y Tipo de Empresa")+
+  facet_wrap(~TipoEmpresa)+
+  theme_grey()+
+  theme(legend.position = "none")                            
+#solvencia
+ggplot(empresas_activa, aes(x=fecha_const,  y = Apalancamiento, color= TipoEmpresa, group=TipoEmpresa)) +
+  geom_line() +
+  labs(title = "Gráfico comparativo",
+       subtitle = "Gráfico comparativo entre Liquidez Corriente y Tipo de Empresa")+
+  facet_wrap(~TipoEmpresa)+
+  theme_grey()+
+  theme(legend.position = "none") 
+```
+
+### Preguntas de Investigación
+
+
+#### ¿El endeudamiento del activo fue mayor en empresas micro + pequeñas vs. grandes?
+
+```{r}
+
+pregunta1<-empresas_4 %>% dplyr::group_by(empresas_4$tamanio) %>% summarise(Promedio_Endeudamiento=mean(EndeudamientoActivo, na.rm = TRUE))
+
+pregunta1
+
+#grafico_endeudamiento <- ggplot(pregunta1, aes(x = tamanio, y = Promedio_Endeudamiento, fill = tamanio)) +  geom_bar(stat = "identity") + scale_fill_brewer(palette = "Set1") +
+#  labs(title = "Promedio del Endeudamiento Activo por Tamaño de Empresa",
+#       x = "Tamaño de Empresa",
+#       y = "Promedio del Endeudamiento Activo") +
+#  theme_minimal()
+
+#grafico_endeudamiento
+```
+
+#### ¿La liquidez por tipo de compañía es diferente entre aquellas empresas que tienen más de 60 trabajadores directos y que cuenta con 100 a 800 trabajadores administrativos?
+
+```{r}
+#empresas_filtradas <- empresas_4 %>%
+ # dplyr:::filter(empresas_4$trabajadores_administrativos >= 100, empresas_4$trabajadores_administrativos <= 800,empresas_4$trabajadores_directo > 60)
+
+#empresas_filtradas
+
+#pregunta2 <- empresas_filtradas %>%
+#  dplyr::group_by(empresas_filtradas$TipoEmpresa) %>%
+#  summarise(Promedio_Liquidez = mean(LiquidezCorriente, na.rm = FALSE))#liquidez por tipo de empresa
+#pregunta2
+#grafico_trabajadores <- ggplot(pregunta2, aes(x = TipoEmpresa, y = Promedio_Liquidez, fill = TipoEmpresa)) +
+#  geom_bar(stat = "identity") +
+#  scale_fill_brewer(palette = "Set1") +
+#  labs(title = "Promedio de Liquidez por Tipo de Empresa",
+#       x = "Tipo de Empresa",
+#       y = "Promedio de Liquidez") +
+#  theme_minimal()
+#grafico_trabajadores
+```
+
+
+
+
+#### Describe el top 10 de empresas con mayor apalancamiento.
+```{r}
+top_empresas_apalancamiento <- empresas_4 %>%
+  dplyr::arrange(desc(empresas_4$Apalancamiento)) %>%
+  head(10) 
+top_empresas_apalancamiento
+
+grafico_apalancamiento <- ggplot(top_empresas_apalancamiento, aes(x = Empresas, y = Apalancamiento, fill = Empresas)) +
+  geom_bar(stat = "identity") +
+ labs(title = "Top 10 Empresas con Mayor Apalancamiento",
+       x = "Empresas",
+       y = "Apalancamiento") +
+ theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+ scale_fill_discrete(name = "Empresas")
+grafico_apalancamiento
+```
+
+
+
+
+
+
+## Resumen
+
+El código proporcionado carga datos de diferentes fuentes y realiza varias transformaciones para crear un tibble llamado "empresas_1" que contiene información relevante sobre empresas y algunos ratios financieros calculados. El análisis general es el siguiente:
+
+Datos cargados: Se han cargado datos de diferentes archivos:
+
+•	balances_2014.xlsx: Datos de balances de empresas en el año 2014.
+
+•	cias_codebook.xlsx: Información sobre variables utilizadas en balances_2014.xlsx.
+
+•	ciiu.xlsx: Clasificación de la actividad económica según la CIIU.
+
+•	Formulario_102.xls: Posible información adicional.
+
+Estructura de datos: Los datos de balances_2014.xlsx se han convertido en un tibble llamado "empresas" para facilitar su manipulación y análisis. Los tibbles son una forma moderna y mejorada de almacenar datos en R, similar a los data frames.
+Variables calculadas: A partir del tibble "empresas", se han calculado cinco ratios financieros importantes:
+
+•	Liquidez Corriente: Mide la capacidad de la empresa para pagar sus deudas a corto plazo.
+
+•	Endeudamiento Activo: Indica cuánto del activo de la empresa está financiado por deuda.
+
+•	Endeudamiento Patrimonial: Muestra la proporción de activos financiados por el patrimonio.
+
+•	Endeudamiento Activo Fijo: Refleja cuánto del activo fijo está financiado por deuda.
+
+•	Apalancamiento: Representa la proporción de deuda respecto al patrimonio de la empresa.
+
+Selección de variables: Del tibble "empresas_1", se han seleccionado ciertas variables para mantener información relevante sobre las empresas junto con los ratios financieros calculados. Estas variables incluyen nombre de la compañía, situación, tipo de empresa, ubicación geográfica y clasificación de la actividad económica.
