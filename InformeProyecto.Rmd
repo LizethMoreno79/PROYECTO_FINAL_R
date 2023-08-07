@@ -282,10 +282,14 @@ ggplot(empresas_activa, aes(x=fecha_const,  y = Apalancamiento, color= Provincia
   theme(legend.position = "none")
 ```
 
-**Filtrado de Datos**: El código comienza filtrando las empresas que tienen un estado "ACTIVA" del tibble "empresas_4" y crea un nuevo tibble llamado "empresas_activa".
+
+**Filtrado de Datos**: 
+
+El código comienza filtrando las empresas que tienen un estado "ACTIVA" del tibble "empresas_4" y crea un nuevo tibble llamado "empresas_activa".
 Gráfico Comparativo de Liquidez: Utilizando ggplot, se creó un gráfico de líneas para comparar la evolución de la liquidez corriente a lo largo del tiempo. El eje x representa la fecha de constitución ("fecha_const"), el eje y muestra el valor de la liquidez corriente ("LiquidezCorriente"), y el color de las líneas varía según la provincia a la que pertenecen las empresas. El gráfico se presenta con un título ("Gráfico comparativo") y un subtítulo ("Gráfico comparativo entre Liquidez Corriente y provincia"). Además, se utiliza facet_wrap() para dividir el gráfico en múltiples paneles, uno por cada provincia. La función theme_grey() ajusta el aspecto visual del gráfico y theme(legend.position = "none") oculta la leyenda.
 
-Comentarios:
+
+**Comentarios:**
 
 El código busca visualizar la liquidez corriente a lo largo del tiempo para empresas "ACTIVAS", pero esta vez desglosado por provincia.
 El uso de facet_wrap() permite comparar cómo varía la liquidez corriente en diferentes provincias de manera más clara al mostrar cada provincia en su propio panel.
@@ -299,13 +303,27 @@ Cómo podemos observar tenemos 5 provincias con mayor liquidez corriente las cua
 
 
 El código tuvo como objetivo crear una gráfica comparativa de solvencia (medida a través del indicador de apalancamiento) por estado ("Status") y provincia para empresas con estado "ACTIVA".
-Análisis del Código:
-Filtrado de Datos: El código comienza filtrando las empresas que tienen un estado "ACTIVA" del tibble "empresas_4" y crea un nuevo tibble llamado "empresas_activa".
-Gráfico Comparativo de Solvencia: Utilizando ggplot, se crea un gráfico de líneas para comparar la evolución del apalancamiento financiero (solvencia) a lo largo del tiempo. El eje x representa la fecha de constitución ("fecha_const"), el eje y muestra el valor del apalancamiento ("Apalancamiento"), y el color de las líneas varía según la provincia a la que pertenecen las empresas. El gráfico se presenta con un título ("Gráfico comparativo") y un subtítulo ("Gráfico comparativo entre Solvencia y provincia"). Además, se utiliza facet_wrap() para dividir el gráfico en múltiples paneles, uno por cada provincia. La función theme_grey() ajusta el aspecto visual del gráfico y theme(legend.position = "none") oculta la leyenda.
 
-Comentarios:
+
+
+**SOLVENCIA**
+**Análisis del Código:**
+
+**Filtrado de Datos:**
+
+El código comienza filtrando las empresas que tienen un estado "ACTIVA" del tibble "empresas_4" y crea un nuevo tibble llamado "empresas_activa".
+
+*Gráfico Comparativo de Solvencia:*
+
+Utilizando ggplot, se crea un gráfico de líneas para comparar la evolución del apalancamiento financiero (solvencia) a lo largo del tiempo. El eje x representa la fecha de constitución ("fecha_const"), el eje y muestra el valor del apalancamiento ("Apalancamiento"), y el color de las líneas varía según la provincia a la que pertenecen las empresas. El gráfico se presenta con un título ("Gráfico comparativo") y un subtítulo ("Gráfico comparativo entre Solvencia y provincia"). Además, se utiliza facet_wrap() para dividir el gráfico en múltiples paneles, uno por cada provincia. La función theme_grey() ajusta el aspecto visual del gráfico y theme(legend.position = "none") oculta la leyenda.
+
+
+**Comentarios:**
+
 Este código es similar al fragmento anterior, pero en lugar de analizar la liquidez corriente, está enfocado en la solvencia, representada por el indicador de apalancamiento.
+
 Al igual que en el análisis de la liquidez corriente, el uso de facet_wrap() permite comparar cómo varía la solvencia en diferentes provincias, lo que puede ser útil para identificar patrones o tendencias en la solvencia de las empresas.
+
 Cada línea representa una provincia y muestra las fluctuaciones en el indicador de apalancamiento. Los paneles separados por provincia permiten una comparación más detallada entre las diferentes regiones.
 La leyenda se ha ocultado en este caso para evitar la sobrecarga visual y mantener el foco en los datos principales.
 Y cómo podemos visualizar, reflejan 5 provincias con mayor solvencia las cuales son:
@@ -342,20 +360,37 @@ ggplot(empresas_activa, aes(x=fecha_const,  y = Apalancamiento, color= TipoEmpre
 
 El código suministrado tiene como finalidad crear un gráfico comparativo de los indicadores financieros de liquidez corriente por tipo de empresa a lo largo del tiempo. 
 
-Análisis del Código:
-Filtrado de Datos: En el script se comienza filtrando y seleccionando las empresas con estado "ACTIVA" del conjunto de datos "empresas_activa". Esto implica que solo se considerarán las empresas actualmente operativas para el análisis.
-Gráfico Comparativo de Liquidez: Mediante el paquete ggplot2, se genera un gráfico de líneas que compara la evolución de la liquidez corriente en función de la fecha de constitución ("fecha_const"). El eje x muestra las fechas, el eje y representa los valores de liquidez corriente ("LiquidezCorriente"), y el color de las líneas varía según el tipo de empresa ("TipoEmpresa"). El gráfico se titula "Gráfico comparativo" y se complementa con un subtítulo que indica que se está contrastando la "Liquidez Corriente y Tipo de Empresa". Se utiliza la función facet_wrap() para separar el gráfico en múltiples paneles, uno para cada tipo de empresa, permitiendo una comparación más precisa. Además, se configura el tema visual del gráfico con theme_grey() y se omite la leyenda mediante theme(legend.position = "none").
-Comentarios:
+**Análisis del Código:**
+
+*Filtrado de Datos:*
+
+En el script se comienza filtrando y seleccionando las empresas con estado "ACTIVA" del conjunto de datos "empresas_activa". Esto implica que solo se considerarán las empresas actualmente operativas para el análisis.
+
+*Gráfico Comparativo de Liquidez:* 
+
+Mediante el paquete ggplot2, se genera un gráfico de líneas que compara la evolución de la liquidez corriente en función de la fecha de constitución ("fecha_const"). El eje x muestra las fechas, el eje y representa los valores de liquidez corriente ("LiquidezCorriente"), y el color de las líneas varía según el tipo de empresa ("TipoEmpresa"). El gráfico se titula "Gráfico comparativo" y se complementa con un subtítulo que indica que se está contrastando la "Liquidez Corriente y Tipo de Empresa". Se utiliza la función facet_wrap() para separar el gráfico en múltiples paneles, uno para cada tipo de empresa, permitiendo una comparación más precisa. Además, se configura el tema visual del gráfico con theme_grey() y se omite la leyenda mediante theme(legend.position = "none").
+
+**Comentarios:**
+
 Este código busca proporcionar una visión comparativa de cómo ha evolucionado la liquidez corriente en diferentes tipos de empresas a lo largo del tiempo. El uso de facet_wrap() permite un análisis detallado al presentar cada tipo de empresa en su propio panel. Esto es útil para detectar tendencias o variaciones específicas en la liquidez de distintos tipos de empresas.
 La comparativa podría revelar patrones generales, como si ciertos tipos de empresas mantienen consistentemente una mayor liquidez que otros o si hay variaciones significativas en períodos específicos. Asimismo, podrían identificarse empresas atípicas que divergen notablemente de la tendencia común, lo que podría indicar circunstancias financieras únicas.
 En resumen, el análisis visual ofrece una perspectiva rápida y efectiva de la evolución de la liquidez corriente en función del tipo de empresa, ayudando a tomar decisiones informadas sobre la gestión financiera y a identificar áreas que requieran mayor atención.
 
 Se tuvo como objetivo crear un gráfico comparativo de los indicadores financieros de solvencia (medidos a través del indicador de apalancamiento) por tipo de empresa a lo largo del tiempo. 
-Análisis del Código:
-Selección de Datos: Se utiliza el conjunto de datos "empresas_activa" para generar el gráfico. Las empresas consideradas son aquellas que tienen un estado "ACTIVA".
-Gráfico Comparativo de Solvencia: Utilizando el paquete ggplot2, se crea un gráfico de líneas que compara la evolución del apalancamiento financiero en función de la fecha de constitución ("fecha_const"). El eje x muestra las fechas, el eje y representa los valores de apalancamiento ("Apalancamiento"), y el color de las líneas varía según el tipo de empresa ("TipoEmpresa"). El gráfico se titula "Gráfico comparativo" y se complementa con un subtítulo que indica "Gráfico comparativo entre Liquidez Corriente y Tipo de Empresa". Mediante facet_wrap(), el gráfico se divide en múltiples paneles, uno para cada tipo de empresa, lo que permite comparar las tendencias de apalancamiento entre los diferentes tipos. Se establece el tema visual del gráfico con theme_grey(), y la leyenda se omite mediante theme(legend.position = "none").
 
-Comentarios:
+**Análisis del Código:**
+
+*Selección de Datos:*
+
+Se utiliza el conjunto de datos "empresas_activa" para generar el gráfico. Las empresas consideradas son aquellas que tienen un estado "ACTIVA".
+
+*Gráfico Comparativo de Solvencia:*
+
+Utilizando el paquete ggplot2, se crea un gráfico de líneas que compara la evolución del apalancamiento financiero en función de la fecha de constitución ("fecha_const"). El eje x muestra las fechas, el eje y representa los valores de apalancamiento ("Apalancamiento"), y el color de las líneas varía según el tipo de empresa ("TipoEmpresa"). El gráfico se titula "Gráfico comparativo" y se complementa con un subtítulo que indica "Gráfico comparativo entre Liquidez Corriente y Tipo de Empresa". Mediante facet_wrap(), el gráfico se divide en múltiples paneles, uno para cada tipo de empresa, lo que permite comparar las tendencias de apalancamiento entre los diferentes tipos. Se establece el tema visual del gráfico con theme_grey(), y la leyenda se omite mediante theme(legend.position = "none").
+
+
+**Comentarios:**
+
 Este código busca proporcionar una representación visual de la evolución del apalancamiento financiero en diferentes tipos de empresas a lo largo del tiempo. La función facet_wrap() facilita la comparación al mostrar cada tipo de empresa en su propio panel, lo que permite identificar tendencias específicas y variaciones en el apalancamiento.
 Al igual que en el análisis anterior, este gráfico podría revelar patrones importantes, acerca de si ciertos tipos de empresas han mantenido un apalancamiento constante o si ha habido fluctuaciones significativas en el apalancamiento a lo largo del tiempo. También podría ayudar a identificar posibles correlaciones entre el apalancamiento y otros factores financieros o económicos.
 Permitiendo un análisis visual brindando información valiosa sobre cómo la solvencia de diferentes tipos de empresas ha evolucionado a lo largo del tiempo, lo que puede ser útil para la toma de decisiones financieras estratégicas y la identificación de posibles áreas de riesgo o oportunidad.
@@ -448,7 +483,9 @@ El gráfico corresponde a las 10 empresas con mayor apalancamiento. Cada barra r
 
 El código proporcionado carga datos de diferentes fuentes y realiza varias transformaciones para crear un tibble llamado "empresas_1" que contiene información relevante sobre empresas y algunos ratios financieros calculados. El análisis general es el siguiente:
 
-Datos cargados: Se han cargado datos de diferentes archivos:
+Datos cargados: 
+
+Se han cargado datos de diferentes archivos:
 
 •	balances_2014.xlsx: Datos de balances de empresas en el año 2014.
 
@@ -473,7 +510,9 @@ Variables calculadas: A partir del tibble "empresas", se han calculado cinco rat
 
 Selección de variables: Del tibble "empresas_1", se han seleccionado ciertas variables para mantener información relevante sobre las empresas junto con los ratios financieros calculados. Estas variables incluyen nombre de la compañía, situación, tipo de empresa, ubicación geográfica y clasificación de la actividad económica.
 
-1. Limpieza y preparación de datos: Se han realizado diversas operaciones para limpiar y preparar los datos para su análisis:
+1. **Limpieza y preparación de datos**
+
+Se han realizado diversas operaciones para limpiar y preparar los datos para su análisis:
    - Se convirtieron algunas variables categóricas en factores para facilitar su manejo en análisis posteriores.
    - Se eliminaron valores infinitos (`-Inf` y `+Inf`) en las variables numéricas, reemplazándolos por valores faltantes (`NA`).
    - Se eliminaron las filas que contenían valores faltantes (`NA`) en el tibble "empresas_3".
@@ -481,10 +520,15 @@ Selección de variables: Del tibble "empresas_1", se han seleccionado ciertas va
 
 2. Gráficos de líneas por provincia y tipo de empresa: Se han creado gráficos de líneas para visualizar la evolución de la liquidez corriente y el apalancamiento financiero a lo largo del tiempo, desagregados por provincia y tipo de empresa. Estos gráficos permiten observar patrones y tendencias en las variables financieras en diferentes áreas geográficas y tipos de empresas.
 
-3. Preguntas de Investigación:
+3. **Preguntas de Investigación**
+
    - Pregunta 1: Se analizó el promedio del endeudamiento del activo para diferentes tamaños de empresas. El gráfico de barras muestra que las empresas más pequeñas y microempresas tienden a tener un endeudamiento del activo más alto en comparación con las grandes empresas.
+   
    - Pregunta 2: Se filtraron las empresas que tienen más de 60 trabajadores directos y que cuentan con 100 a 800 trabajadores administrativos. El gráfico de barras muestra que el tipo de empresa tiene una influencia en la liquidez corriente, siendo las empresas tipo "B" las que presentan el promedio más alto.
+   
    - Pregunta 3: Se identificaron las 10 empresas con mayor apalancamiento financiero. El gráfico de barras muestra las empresas que tienen un mayor riesgo financiero debido a su alto nivel de apalancamiento.
 
-4. Conclusión: El análisis general de los datos muestra que el endeudamiento del activo tiende a ser más alto en empresas más pequeñas y microempresas, lo que puede indicar una mayor dependencia de la deuda para financiar sus activos. Además, se observa que la liquidez corriente varía según el tipo de empresa, siendo las empresas tipo "B" las que tienen un promedio más alto en este aspecto. Por último, se identificaron las empresas con mayor apalancamiento financiero, lo que sugiere que podrían tener una mayor exposición al riesgo financiero.
+4. Conclusión
+
+El análisis general de los datos muestra que el endeudamiento del activo tiende a ser más alto en empresas más pequeñas y microempresas, lo que puede indicar una mayor dependencia de la deuda para financiar sus activos. Además, se observa que la liquidez corriente varía según el tipo de empresa, siendo las empresas tipo "B" las que tienen un promedio más alto en este aspecto. Por último, se identificaron las empresas con mayor apalancamiento financiero, lo que sugiere que podrían tener una mayor exposición al riesgo financiero.
 
